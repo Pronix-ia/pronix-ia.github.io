@@ -1,5 +1,10 @@
 let verificationCode; // Variable pour stocker le code de vérification
 
+// Initialiser EmailJS
+(function() {
+    emailjs.init("YOUR_USER_ID"); // Remplacez par votre User ID
+})();
+
 document.getElementById("loginButton").addEventListener("click", function() {
     document.getElementById("authModal").style.display = "block";
 });
@@ -8,22 +13,29 @@ document.querySelector(".close-button").addEventListener("click", function() {
     document.getElementById("authModal").style.display = "none";
 });
 
-document.getElementById("submitAuthButton").addEventListener("click", function() {
+document.getElementById("submitAuthButton").addEventListener("click", async function() {
     const username = document.getElementById("username").value.trim();
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
 
     if (username && email && password) {
-        if (validateEmail(email)) {
-            // Générer un code de vérification aléatoire
-            verificationCode = Math.floor(100000 + Math.random() * 900000); // Code à 6 chiffres
-            alert(`Un e-mail de vérification a été envoyé à ${email}. Votre code est : ${verificationCode}`); // Simuler l'envoi de l'e-mail
-            
-            // Afficher la section de vérification
+        // Générer un code de vérification aléatoire
+        verificationCode = Math.floor(100000 + Math.random() * 900000); // Code à 6 chiffres
+
+        // Envoyer l'e-mail de vérification
+        const templateParams = {
+            to_email: email,
+            verification_code: verificationCode,
+            username: username
+        };
+
+        try {
+            await emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", templateParams); // Remplacez par votre Service ID et Template ID
             document.getElementById("verificationSection").style.display = "block";
-            document.getElementById("authMessage").textContent = "";
-        } else {
-            document.getElementById("authMessage").textContent = "Veuillez entrer un e-mail valide.";
+            document.getElementById("authMessage").textContent = "Vérifiez votre e-mail pour le code de vérification.";
+        } catch (error) {
+            console.error("Erreur lors de l'envoi de l'e-mail:", error);
+            document.getElementById("authMessage").textContent = "Erreur lors de l'envoi de l'e-mail.";
         }
     } else {
         document.getElementById("authMessage").textContent = "Veuillez remplir tous les champs.";
@@ -119,6 +131,9 @@ function validateEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
 }
+
+// Vérifier si l'utilisateur est déjà connecté au chargement de la page
+window.onload =
 
 // Vérifier si l'utilisateur est déjà connecté au chargement de la page
 window.onload = function() {
