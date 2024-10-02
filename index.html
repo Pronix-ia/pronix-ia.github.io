@@ -18,11 +18,17 @@
         <div class="modal-content">
             <span class="close-button">&times;</span>
             <h2>Connexion / Inscription</h2>
-            <input type="text" id="username" placeholder="Nom d'utilisateur" />
-            <input type="email" id="email" placeholder="Votre e-mail" />
-            <input type="password" id="password" placeholder="Mot de passe" />
-            <button id="submitAuthButton">Se connecter</button>
+            <input type="text" id="username" placeholder="Nom d'utilisateur" required />
+            <input type="email" id="email" placeholder="Votre e-mail" required />
+            <input type="password" id="password" placeholder="Mot de passe" required />
+            <button id="submitAuthButton">S'inscrire</button>
             <p id="authMessage"></p>
+            <div id="verificationSection" style="display:none;">
+                <h3>Vérification de l'e-mail</h3>
+                <input type="text" id="verificationCode" placeholder="Entrez le code de vérification" required />
+                <button id="verifyButton">Vérifier</button>
+                <p id="verificationMessage"></p>
+            </div>
         </div>
     </div>
 
