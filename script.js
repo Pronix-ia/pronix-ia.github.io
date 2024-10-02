@@ -8,14 +8,21 @@ document.querySelector(".close-button").addEventListener("click", function() {
 
 document.getElementById("submitAuthButton").addEventListener("click", function() {
     const username = document.getElementById("username").value;
+    const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    // Simuler l'authentification
-    if (username && password) {
-        localStorage.setItem("username", username);
-        document.getElementById("authMessage").textContent = "";
-        document.getElementById("authModal").style.display = "none";
-        showMainContent();
+    // Simuler l'authentification avec vérification d'e-mail
+    if (username && email && password) {
+        // Vérification simple de l'e-mail
+        if (validateEmail(email)) {
+            localStorage.setItem("username", username);
+            localStorage.setItem("email", email); // Stocker l'e-mail
+            document.getElementById("authMessage").textContent = "";
+            document.getElementById("authModal").style.display = "none";
+            showMainContent();
+        } else {
+            document.getElementById("authMessage").textContent = "Veuillez entrer un e-mail valide.";
+        }
     } else {
         document.getElementById("authMessage").textContent = "Veuillez remplir tous les champs.";
     }
@@ -23,6 +30,7 @@ document.getElementById("submitAuthButton").addEventListener("click", function()
 
 document.getElementById("logoutButton").addEventListener("click", function() {
     localStorage.removeItem("username");
+    localStorage.removeItem("email"); // Supprimer l'e-mail à la déconnexion
     hideMainContent();
 });
 
@@ -87,6 +95,12 @@ function storeLearnedResponse(question, answer) {
     const learnedResponses = JSON.parse(localStorage.getItem("learnedResponses")) || {};
     learnedResponses[question.toLowerCase()] = answer;
     localStorage.setItem("learnedResponses", JSON.stringify(learnedResponses));
+}
+
+// Fonction de validation d'e-mail
+function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
 }
 
 // Vérifier si l'utilisateur est déjà connecté au chargement de la page
